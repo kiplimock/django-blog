@@ -2,11 +2,11 @@
 
 {% block content %}
     <h1>New Post</h1>
-    <form class="post-form" action="POST">
+    <form class="post-form" method="POST">
         {% csrf_token %}
         {{ form.as_p }}
-        <button class="btn btn-default save" type="submit">Save</button>
+        <button class="btn btn-success save" type="submit">Save</button>
     </form>
 
-    <script>var editor = new MediumEditor('editable');</script>
+    <script>var editor = new MediumEditor('.editable');</script>
 {% endblock content %}

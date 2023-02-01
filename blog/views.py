@@ -46,7 +46,7 @@ class DraftListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         # field lookupt
-        return Post.objects.filter(published_date__isnull=True).order_by('created_date')
+        return Post.objects.filter(published_date__isnull=True).order_by('create_date')
     
 
 #########################################################################
@@ -59,7 +59,7 @@ def post_publish(request, pk):
     return redirect('post_detail', pk=pk)
 
 @login_required
-def add_comments_to_post(request, pk):
+def add_comment_to_post(request, pk):
     post = get_object_or_404(Post, pk=pk)
     if request.method == "POST":
         form = CommentForm(request.POST)
@@ -68,20 +68,20 @@ def add_comments_to_post(request, pk):
             comment.post = post
             comment.save()
             return redirect('post_detail', pk=post.pk)
-        else:
-            form = CommentForm()
-        
-        return render(request, 'blog/comment_form.html', {'form':form})
+    else:
+        form = CommentForm()
+    
+    return render(request, 'blog/comment_form.html', {'form': form})
 
 @login_required
 def comment_approve(request, pk):
-    comment = get_object_or_404(Comment, pk)
+    comment = get_object_or_404(Comment, pk=pk)
     comment.approve()
     return redirect('post_detail', pk=comment.post.pk)
 
 @login_required
 def comment_remove(request, pk):
-    comment = get_object_or_404(Comment, pk)
+    comment = get_object_or_404(Comment, pk=pk)
     post_pk = comment.post.pk
     comment.delete()
     return redirect('post_detail', pk=post_pk)
